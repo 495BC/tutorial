@@ -1,34 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Portfolio</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Digital Garden</title>
+  <!-- Tailwind for rapid styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- PixiJS for WebGL parallax -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/6.5.2/pixi.min.js"></script>
+  <!-- Socket.io for real-time interactions -->
+  <script src="/socket.io/socket.io.js"></script>
+  <style>
+    html, body { height: 100%; margin: 0; }
+    #canvas-bg { position: fixed; width: 100%; height: 100%; z-index: -1; }
+    .node { @apply bg-white dark:bg-gray-800 rounded-xl p-4 shadow-lg cursor-move; }
+  </style>
 </head>
-<body>
-  <header class="navbar">
-    <div class="logo">MyPortfolio</div>
-    <button id="theme-toggle" class="toggle-btn">🌙</button>
+<body class="bg-green-50 dark:bg-midnight-900 transition-colors duration-500">
+  <!-- WebGL Parallax Background -->
+  <canvas id="canvas-bg"></canvas>
+
+  <!-- Top Controls -->
+  <header class="flex justify-between p-4">
+    <button id="toggle-theme" class="px-4 py-2 rounded bg-blue-500 text-white">Toggle Season</button>
+    <div class="flex space-x-2">
+      <button id="add-node" class="px-4 py-2 rounded bg-green-500 text-white">Plant Idea</button>
+      <button id="daily-prompt" class="px-4 py-2 rounded bg-yellow-400 text-black">Today's Prompt</button>
+    </div>
   </header>
 
-  <section class="hero reveal">
-    <div class="intro glass">
-      <h1>Welcome!</h1>
-      <p>Check out my work below.</p>
-    </div>
-  </section>
+  <!-- Main Canvas -->
+  <main id="garden" class="relative w-full h-[calc(100%-4rem)] overflow-hidden">
+    <!-- Nodes get injected here dynamically -->
+  </main>
 
-  <section class="gallery reveal">
-    <h2>Featured Projects</h2>
-    <div class="grid" id="grid">
-      <div class="card glass"><img src="assets/project1.jpg" alt=""><h3>One</h3></div>
-      <div class="card glass"><img src="assets/project2.jpg" alt=""><h3>Two</h3></div>
-      <!-- More cards -->
+  <!-- Engagement Feed -->
+  <footer class="fixed bottom-0 w-full bg-white dark:bg-gray-800 p-2 shadow-inner">
+    <div id="activity-feed" class="flex space-x-4 overflow-x-auto">
+      <!-- Recent actions -->
     </div>
-  </section>
+  </footer>
 
-  <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
-  <script defer src="script.js"></script>
+  <!-- Core Scripts -->
+  <script>
+    // Initialize PIXI parallax scene
+    const app = new PIXI.Application({ view: document.getElementById('canvas-bg'), transparent: true });
+    // ...load layers, animate
+
+    // Socket.io setup
+    const socket = io();
+    socket.on('update', data => renderNodeUpdate(data));
+
+    // Node management
+    document.getElementById('add-node').onclick = () => createNode();
+    function createNode(content = '') {
+      const node = document.createElement('div');
+      node.className = 'node absolute';
+      node.contentEditable = true;
+      node.innerText = content || 'New Idea…';
+      node.style.left = '50%'; node.style.top = '50%';
+      enableDrag(node);
+      document.getElementById('garden').appendChild(node);
+      socket.emit('new-node', { content });
+    }
+    function enableDrag(el) {
+      // attach mousedown, mousemove, mouseup for dragging
+    }
+
+    // Theme toggle
+    document.getElementById('toggle-theme').onclick = () => {
+      document.body.classList.toggle('dark');
+    };
+
+    // Daily prompt modal
+    document.getElementById('daily-prompt').onclick = () => {
+      alert("🌱 Prompt: Plant an idea about emerging AI ethics!");
+    };
+  </script>
 </body>
 </html>
