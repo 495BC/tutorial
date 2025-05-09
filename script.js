@@ -1,15 +1,15 @@
-// Dark‑mode toggle with localStorage
-const btn = document.getElementById('theme-toggle');
+// 1. Apply saved theme or default
 const root = document.documentElement;
-btn.addEventListener('click', () => {
+root.setAttribute('data-theme', localStorage.getItem('theme') || '');
+
+// 2. Dark‑mode Toggle
+document.getElementById('theme-toggle').addEventListener('click', () => {
   const next = root.getAttribute('data-theme') === 'dark' ? '' : 'dark';
   root.setAttribute('data-theme', next);
   localStorage.setItem('theme', next);
 });
-// Apply saved theme
-root.setAttribute('data-theme', localStorage.getItem('theme') || '');
 
-// Scroll‑triggered reveal
+// 3. Scroll‑triggered Reveal
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (e.isIntersecting) {
@@ -20,7 +20,7 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.15 });
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-// Optional: register Houdini layout worklet (masonry)
-if ('registerLayoutWorklet' in CSS) {
-  CSS.registerLayoutWorklet('masonry-grid', new URL('masonry-worklet.js', import.meta.url));
-}
+// 4. Initialize Masonry Fallback
+document.addEventListener('DOMContentLoaded', () => {
+  new Masonry('#grid', { itemSelector: '.card', gutter: 16 });
+});
