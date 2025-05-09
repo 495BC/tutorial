@@ -3,79 +3,187 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Digital Garden</title>
-  <!-- Tailwind for rapid styling -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- PixiJS for WebGL parallax -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/6.5.2/pixi.min.js"></script>
-  <!-- Socket.io for real-time interactions -->
-  <script src="/socket.io/socket.io.js"></script>
+  <title>My Minimal Portfolio</title>
   <style>
-    html, body { height: 100%; margin: 0; }
-    #canvas-bg { position: fixed; width: 100%; height: 100%; z-index: -1; }
-    .node { @apply bg-white dark:bg-gray-800 rounded-xl p-4 shadow-lg cursor-move; }
+    /* Theme Variables */
+    :root {
+      --bg: #ffffff;
+      --fg: #111111;
+      --accent: #0077cc;
+      --transition: 0.3s ease;
+    }
+    [data-theme="dark"] {
+      --bg: #111111;
+      --fg: #eeeeee;
+      --accent: #66ccff;
+    }
+
+    /* Reset & Base */
+    *, *::before, *::after {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: sans-serif;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    /* Header & Navigation */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      background: var(--accent);
+      color: #fff;
+    }
+    nav a {
+      margin: 0 0.5rem;
+      color: #fff;
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+    nav a:hover {
+      color: #000;
+    }
+    .dark-toggle {
+      cursor: pointer;
+      background: none;
+      border: 1px solid #fff;
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      transition: background var(--transition), color var(--transition);
+    }
+    .dark-toggle:hover {
+      background: #fff;
+      color: var(--accent);
+    }
+
+    /* Hero Section */
+    .hero {
+      display: grid;
+      place-items: center;
+      height: 60vh;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    /* Projects Grid */
+    #projects {
+      padding: 2rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+    .card {
+      background: var(--accent);
+      color: #fff;
+      padding: 1rem;
+      border-radius: 8px;
+      transition: transform var(--transition);
+    }
+    .card:hover {
+      transform: scale(1.05);
+    }
+
+    /* Contact Form */
+    #contact {
+      padding: 2rem;
+    }
+    form {
+      max-width: 400px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    input, textarea {
+      padding: 0.6rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button.submit {
+      padding: 0.8rem;
+      border: none;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: transform var(--transition);
+    }
+    button.submit:hover {
+      transform: translateY(-2px);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      background: #f5f5f5;
+    }
   </style>
 </head>
-<body class="bg-green-50 dark:bg-midnight-900 transition-colors duration-500">
-  <!-- WebGL Parallax Background -->
-  <canvas id="canvas-bg"></canvas>
-
-  <!-- Top Controls -->
-  <header class="flex justify-between p-4">
-    <button id="toggle-theme" class="px-4 py-2 rounded bg-blue-500 text-white">Toggle Season</button>
-    <div class="flex space-x-2">
-      <button id="add-node" class="px-4 py-2 rounded bg-green-500 text-white">Plant Idea</button>
-      <button id="daily-prompt" class="px-4 py-2 rounded bg-yellow-400 text-black">Today's Prompt</button>
-    </div>
+<body data-theme="">
+  <header>
+    <h1>My Portfolio</h1>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <button class="dark-toggle" id="theme-btn">Toggle Theme</button>
   </header>
 
-  <!-- Main Canvas -->
-  <main id="garden" class="relative w-full h-[calc(100%-4rem)] overflow-hidden">
-    <!-- Nodes get injected here dynamically -->
-  </main>
+  <section class="hero" id="about">
+    <h2>Hello, I'm Jane Doe</h2>
+    <p>Web Developer & Designer</p>
+  </section>
 
-  <!-- Engagement Feed -->
-  <footer class="fixed bottom-0 w-full bg-white dark:bg-gray-800 p-2 shadow-inner">
-    <div id="activity-feed" class="flex space-x-4 overflow-x-auto">
-      <!-- Recent actions -->
+  <section id="projects">
+    <h2>Projects</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Project One</h3>
+        <p>Short description of project one.</p>
+      </div>
+      <div class="card">
+        <h3>Project Two</h3>
+        <p>Short description of project two.</p>
+      </div>
+      <div class="card">
+        <h3>Project Three</h3>
+        <p>Short description of project three.</p>
+      </div>
     </div>
-  </footer>
+  </section>
 
-  <!-- Core Scripts -->
+  <section id="contact">
+    <h2>Contact Me</h2>
+    <form>
+      <input type="text" placeholder="Your Name" required>
+      <input type="email" placeholder="Your Email" required>
+      <textarea placeholder="Your Message" rows="4" required></textarea>
+      <button type="submit" class="submit">Send Message</button>
+    </form>
+  </section>
+
+  <footer>© 2025 Jane Doe</footer>
+
   <script>
-    // Initialize PIXI parallax scene
-    const app = new PIXI.Application({ view: document.getElementById('canvas-bg'), transparent: true });
-    // ...load layers, animate
-
-    // Socket.io setup
-    const socket = io();
-    socket.on('update', data => renderNodeUpdate(data));
-
-    // Node management
-    document.getElementById('add-node').onclick = () => createNode();
-    function createNode(content = '') {
-      const node = document.createElement('div');
-      node.className = 'node absolute';
-      node.contentEditable = true;
-      node.innerText = content || 'New Idea…';
-      node.style.left = '50%'; node.style.top = '50%';
-      enableDrag(node);
-      document.getElementById('garden').appendChild(node);
-      socket.emit('new-node', { content });
-    }
-    function enableDrag(el) {
-      // attach mousedown, mousemove, mouseup for dragging
-    }
-
-    // Theme toggle
-    document.getElementById('toggle-theme').onclick = () => {
-      document.body.classList.toggle('dark');
-    };
-
-    // Daily prompt modal
-    document.getElementById('daily-prompt').onclick = () => {
-      alert("🌱 Prompt: Plant an idea about emerging AI ethics!");
-    };
+    // Dark‑mode toggle with localStorage persistence
+    const btn = document.getElementById('theme-btn');
+    const root = document.documentElement;
+    btn.addEventListener('click', () => {
+      const next = root.getAttribute('data-theme') === 'dark' ? '' : 'dark';
+      root.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+    // Apply saved theme on load
+    root.setAttribute('data-theme', localStorage.getItem('theme') || '');
   </script>
 </body>
 </html>
