@@ -2,36 +2,223 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>AI‑Enhanced Interactive Portfolio</title>
-  <link rel="stylesheet" href="styles.css" />
-  <script src="houdini-worklets.js" defer></script>
-  <script src="ai-personalization.js" defer></script>
+  <style>
+    /* === Root & Theme Variables === */
+    :root {
+      --bg: #f0f0f5;
+      --fg: #1a1a1a;
+      --card-bg: rgba(255, 255, 255, 0.2);
+      --glass-blur: 10px;
+      --accent: #00afff;
+      --transition: 0.3s ease;
+    }
+    [data-theme="dark"] {
+      --bg: #1a1a1a;
+      --fg: #f0f0f5;
+      --card-bg: rgba(20, 20, 20, 0.3);
+      --accent: #66ccff;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Segoe UI', sans-serif;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    /* === Navbar & Dark‑Mode Toggle === */
+    header.navbar {
+      position: sticky;
+      top: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      backdrop-filter: blur( var(--glass-blur) );
+      background: var(--card-bg);
+      z-index: 100;
+    }
+    .toggle-btn {
+      cursor: pointer;
+      background: none;
+      border: 2px solid var(--accent);
+      border-radius: 4px;
+      padding: 0.4rem 0.8rem;
+      color: var(--accent);
+      transition: background var(--transition), color var(--transition);
+    }
+    .toggle-btn:hover, .toggle-btn:focus {
+      background: var(--accent);
+      color: var(--bg);
+    }
+
+    /* === Hero Section with Glassmorphism === */
+    .hero {
+      height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: url('hero-bg.jpg') center/cover no-repeat;
+      position: relative;
+    }
+    .hero .intro {
+      background: var(--card-bg);
+      backdrop-filter: blur( var(--glass-blur) );
+      padding: 2rem;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 500px;
+    }
+    .hero h1 {
+      margin: 0 0 1rem;
+      font-size: 3rem;
+      line-height: 1.1;
+    }
+
+    /* === Masonry Grid Gallery === */
+    .gallery {
+      padding: 2rem;
+    }
+    .gallery h2 {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    .masonry-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      /* experimental masonry axis */
+      grid-template-rows: masonry;
+      gap: 1rem;
+    }
+    .project-card {
+      background: var(--card-bg);
+      backdrop-filter: blur( var(--glass-blur) );
+      border-radius: 8px;
+      overflow: hidden;
+      transform: translateY(20px);
+      opacity: 0;
+      transition: transform var(--transition), opacity var(--transition);
+    }
+    .project-card img {
+      width: 100%;
+      display: block;
+    }
+    .project-card h3 {
+      margin: 0.5rem 1rem 0;
+    }
+    .project-card p {
+      margin: 0.5rem 1rem 1rem;
+      font-size: 0.9rem;
+    }
+    .project-card:hover {
+      border: 2px solid var(--accent);
+    }
+
+    /* === Scroll Animation Utility === */
+    .reveal {
+      transform: translateY(20px);
+      opacity: 0;
+      transition: transform var(--transition), opacity var(--transition);
+    }
+    .reveal.visible {
+      transform: none;
+      opacity: 1;
+    }
+  </style>
 </head>
 <body>
+
+  <!-- Navbar -->
   <header class="navbar">
-    <!-- Logo + Brutalist Nav Links + Dark Mode Toggle -->
+    <div class="logo">My Portfolio</div>
+    <button class="toggle-btn" id="theme-toggle">Toggle Theme</button>
   </header>
 
-  <section class="hero glassmorphism">
-    <!-- Fullscreen intro with WebGL background -->
+  <!-- Hero -->
+  <section class="hero">
+    <div class="intro reveal">
+      <h1>Welcome to My World</h1>
+      <p>An AI‑Enhanced Interactive Showcase of My Best Work.</p>
+    </div>
   </section>
 
-  <section class="recommendations">
-    <!-- AI‑driven personalized content -->
+  <!-- AI Recommendations (Stub) -->
+  <section class="recommendations reveal">
+    <h2>Recommended for You</h2>
+    <p>(AI personalization module loading...)</p>
   </section>
 
-  <section class="gallery">
-    <!-- Houdini masonry grid of projects -->
+  <!-- Project Gallery -->
+  <section class="gallery reveal">
+    <h2>Featured Projects</h2>
+    <div class="masonry-grid" id="masonry">
+      <article class="project-card">
+        <img src="project1.jpg" alt="Project 1">
+        <h3>Project One</h3>
+        <p>Short description of project one.</p>
+      </article>
+      <article class="project-card">
+        <img src="project2.jpg" alt="Project 2">
+        <h3>Project Two</h3>
+        <p>Short description of project two.</p>
+      </article>
+      <!-- More cards -->
+    </div>
   </section>
 
-  <section class="story-scroll">
-    <!-- Scroll‑triggered narrative -->
-  </section>
-
-  <footer class="contact glassmorphism">
-    <!-- Contact form with micro‑interactions -->
+  <!-- Footer / Contact -->
+  <footer class="gallery reveal">
+    <h2>Contact Me</h2>
+    <form>
+      <input type="text" placeholder="Your Name" required/>
+      <input type="email" placeholder="Your Email" required/>
+      <textarea placeholder="Your Message" required></textarea>
+      <button type="submit">Send</button>
+    </form>
   </footer>
+
+  <script>
+    // === Dark Mode Toggle ===
+    const themeBtn = document.getElementById('theme-toggle');
+    themeBtn.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'dark' ? '' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+    // Apply saved theme on load
+    document.documentElement.setAttribute(
+      'data-theme',
+      localStorage.getItem('theme') || ''
+    );
+
+    // === Scroll‑Triggered Reveal ===
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // === CSS Houdini Layout Worklet Registration ===
+    if ('registerLayoutWorklet' in CSS) {
+      CSS.registerLayoutWorklet('masonry-grid', new URL('masonry-worklet.js', import.meta.url));
+    }
+
+    // === Stub: AI Personalization Loader ===
+    function loadPersonalization() {
+      // Placeholder for AI-driven content logic
+      console.log('Loading AI personalization modules…');
+    }
+    loadPersonalization();
+  </script>
+
 </body>
 </html>
-
