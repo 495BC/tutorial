@@ -6,16 +6,13 @@
   <title>ChronoQuest</title>
 
   <!-- Tailwind CSS (Play CDN) -->
-  <script src="https://cdn.tailwindcss.com"></script> <!-- :contentReference[oaicite:11]{index=11} -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Phaser 3 -->
-  <script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.min.js"></script> <!-- :contentReference[oaicite:12]{index=12} -->
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.min.js"></script>
 
   <!-- GSAP 3 -->
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script> <!-- :contentReference[oaicite:13]{index=13} -->
-
-  <!-- Socket.IO Client -->
-  <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4/dist/socket.io.min.js"></script> <!-- :contentReference[oaicite:14]{index=14} -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
 
   <style>
     /* Neon‑Noir Theme */
@@ -67,10 +64,6 @@
   </section>
 
   <script>
-    // Socket.IO Setup
-    const socket = io(); // connects to the serving host by default :contentReference[oaicite:15]{index=15}
-    socket.on('connect', () => console.log('Socket.IO connected'));
-
     // Modal Animations with GSAP
     const profileBtn = document.getElementById('profile-btn');
     const profileModal = document.getElementById('profileModal');
