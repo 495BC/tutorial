@@ -2,50 +2,33 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portfolio</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <header class="navbar">
-    <div class="logo">My<span>Portfolio</span></div>
+    <div class="logo">MyPortfolio</div>
     <button id="theme-toggle" class="toggle-btn">🌙</button>
   </header>
 
   <section class="hero reveal">
     <div class="intro glass">
-      <h1>Hello, I’m Jane Doe</h1>
-      <p>Designer &amp; Developer crafting immersive web experiences.</p>
+      <h1>Welcome!</h1>
+      <p>Check out my work below.</p>
     </div>
   </section>
 
   <section class="gallery reveal">
     <h2>Featured Projects</h2>
-    <div class="masonry-grid">
-      <article class="card glass">
-        <img src="assets/project1.jpg" alt="Project One">
-        <h3>Project One</h3>
-        <p>A responsive e‑commerce site with custom animations.</p>
-      </article>
-      <article class="card glass">
-        <img src="assets/project2.jpg" alt="Project Two">
-        <h3>Project Two</h3>
-        <p>A single‑page app with real‑time data visualization.</p>
-      </article>
-      <!-- Add more cards as needed -->
+    <div class="grid" id="grid">
+      <div class="card glass"><img src="assets/project1.jpg" alt=""><h3>One</h3></div>
+      <div class="card glass"><img src="assets/project2.jpg" alt=""><h3>Two</h3></div>
+      <!-- More cards -->
     </div>
   </section>
 
-  <section class="contact reveal">
-    <h2>Get In Touch</h2>
-    <form>
-      <input type="text" placeholder="Your Name" required>
-      <input type="email" placeholder="Your Email" required>
-      <textarea placeholder="Your Message" required></textarea>
-      <button type="submit" class="btn glass">Send Message</button>
-    </form>
-  </section>
-
-  <script src="script.js"></script>
+  <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+  <script defer src="script.js"></script>
 </body>
 </html>
